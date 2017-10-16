@@ -1,0 +1,37 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+#if($cfg.baseService == 1)
+import ${superServiceClassPackage};
+#end
+/**
+ * <p>
+ * $!{table.comment} 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if($cfg.baseService == 1)
+public interface ${table.serviceName} extends ${superMapperClass}<${entity}>{
+#elseif($cfg.baseService == 2)
+public interface ${table.serviceName} extends  BaseService<${entity}, ${table.keyField.propertyType}>{
+#else
+public interface ${table.serviceName}{
+
+    ${entity} selectByPrimaryKey(${table.keyField.propertyType} ${table.keyField.propertyName});
+
+    List<${entity}> selectList();
+
+    int insert(${entity} ${instance});
+
+    int insertSelective(${entity} ${instance});
+
+    int updateByPrimaryKey(${entity} ${instance});
+
+    int updateByPrimaryKeySelective(${entity} ${instance});
+
+    int delete(${table.keyField.propertyType} ${table.keyField.propertyName});
+
+#end
+}

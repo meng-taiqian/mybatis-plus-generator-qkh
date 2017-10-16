@@ -1,0 +1,99 @@
+package ${package.Controller};
+
+import ${package.Entity}.${entity};
+import ${package.Service}.${table.serviceName};
+
+import org.springframework.validation.BindingResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMethod;
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${cfg.usingSwagger})
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+import javax.validation.Valid;
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+#if(${cfg.usingSwagger})
+@Api(tags = "$!{table.comment}控制器")
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+#set($keyPropertyType=${table.keyField.propertyType})
+#set($keyPropertyName=${table.keyField.propertyName})
+#set($keyFieldName=${table.keyField.name})
+
+    @Autowired
+    private ${table.serviceName} service;
+
+#if(${cfg.usingSwagger})
+    @ApiOperation(value = "根据主键获取$!{table.comment}")
+#end
+    @RequestMapping(value = "/{$keyPropertyName}", method = RequestMethod.GET)
+    public ${entity} get(@PathVariable $keyPropertyType $keyPropertyName){
+        return service.selectByPrimaryKey($keyPropertyName);
+    }
+
+#if(${cfg.usingSwagger})
+    @ApiOperation(value = "根据主键删除$!{table.comment}")
+#end
+    @RequestMapping(value = "/{$keyPropertyName}", method = RequestMethod.DELETE)
+    public int delete(@PathVariable $keyPropertyType $keyPropertyName){
+        return service.delete($keyPropertyName);
+    }
+
+#if(${cfg.usingSwagger})
+    @ApiOperation(value = "获取$!{table.comment}列表")
+#end
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public List<${entity}> selectList(){
+        return service.selectList();
+    }
+
+#if(${cfg.usingSwagger})
+    @ApiOperation(value = "新增$!{table.comment}")
+#end
+    @RequestMapping(method = RequestMethod.POST)
+    public int insert(@Valid ${entity} ${instance}, BindingResult bindingResult){
+        if (bindingResult.hasErrors())
+            return 0;
+        return service.insert(${instance});
+    }
+
+#if(${cfg.usingSwagger})
+    @ApiOperation(value = "根据主键更新$!{table.comment}信息")
+#end
+    @RequestMapping(value = "/{$keyPropertyName}", method = RequestMethod.PUT)
+    public int update(@PathVariable $keyPropertyType $keyPropertyName, ${entity} ${instance}){
+        ${instance}.setId($keyPropertyName);
+        return service.updateSelective(${instance});
+    }
+	
+}

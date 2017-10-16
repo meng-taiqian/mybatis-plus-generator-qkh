@@ -1,0 +1,40 @@
+package ${package.Mapper};
+
+import ${package.Entity}.${entity};
+#if($cfg.baseMapper == 1)
+import ${superMapperClassPackage};
+#end
+
+/**
+ * <p>
+  * $!{table.comment} Mapper 接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+
+
+#if($cfg.baseMapper == 1)
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}>{
+#elseif($cfg.baseMapper == 2)
+public interface ${table.mapperName} extends  BaseMapper<${entity}, ${table.keyField.propertyType}>{
+#else
+public interface ${table.mapperName}{
+
+        ${entity} selectByPrimaryKey(${table.keyField.propertyType} ${table.keyField.propertyName});
+
+        List<${entity}> selectList();
+
+        int insert(${entity} ${instance});
+
+        int insertSelective(${entity} ${instance});
+
+        int updateByPrimaryKey(${entity} ${instance});
+
+        int updateByPrimaryKeySelective(${entity} ${instance});
+
+        int delete(${table.keyField.propertyType} ${table.keyField.propertyName});
+
+#end
+}
