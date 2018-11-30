@@ -36,6 +36,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  * <p>
@@ -53,6 +54,8 @@ public class MysqlGenerator {
      * </p>
      */
     public static void main(String[] args) {
+        System.out.println(RandomStringUtils.random(16, true, true));
+
         // 自定义需要填充的字段
         List<TableFill> tableFillList = new ArrayList<>();
         tableFillList.add(new TableFill("ASDD_SS", FieldFill.INSERT_UPDATE));
@@ -67,9 +70,9 @@ public class MysqlGenerator {
                         .setEnableCache(false)// XML 二级缓存
                         .setBaseResultMap(true)// XML ResultMap
                         .setBaseColumnList(true)// XML columList
-                        .setAuthor("qiukaihong")
+//                        .setAuthor("qiukaihong")
                 // 自定义文件命名，注意 %s 会自动填充表实体属性！
-                // .setMapperName("%sDao")
+                 .setMapperName("%sMapper")
                         .setXmlName("%sMapper")
                 // .setServiceName("MP%sService")
                 // .setServiceImplName("%sServiceDiy")
@@ -91,16 +94,16 @@ public class MysqlGenerator {
                         })
                         .setDriverName("com.mysql.jdbc.Driver")
                         .setUsername("root")
-                        .setPassword("tiger")
-                        .setUrl("jdbc:mysql://127.0.0.1:3306/world?characterEncoding=utf8")
+                        .setPassword("seekon123456")
+                        .setUrl("jdbc:mysql://172.18.0.31:3306/seekondb1.1?characterEncoding=utf8")
         ).setStrategy(
                 // 策略配置
                 new StrategyConfig()
                         // .setCapitalMode(true)// 全局大写命名
                         // .setDbColumnUnderline(true)//全局下划线命名
-                        // .setTablePrefix(new String[]{"bmd_", "mp_"})// 此处可以修改为您的表前缀
+                        .setTablePrefix(new String[]{"t_", "mp_"})// 此处可以修改为您的表前缀
                         .setNaming(NamingStrategy.underline_to_camel)// 表名生成策略
-                        // .setInclude(new String[] { "user" }) // 需要生成的表
+                        .setInclude(new String[] {"t_recharge_record"}) // 需要生成的表
                         // .setExclude(new String[]{"test"}) // 排除生成的表
                         // 自定义实体父类
                         // .setSuperEntityClass("com.baomidou.demo.TestEntity")
@@ -122,7 +125,7 @@ public class MysqlGenerator {
                         // public User setName(String name) {this.name = name; return this;}
                         // .setEntityBuilderModel(true)
                         // 【实体】是否为lombok模型（默认 false）<a href="https://projectlombok.org/">document</a>
-                        .setEntityLombokModel(true)
+                        .setEntityLombokModel(false)
                         // Boolean类型字段是否移除is前缀处理
                         // .setEntityBooleanColumnRemoveIsPrefix(true)
                         .setRestControllerStyle(true)
@@ -130,9 +133,19 @@ public class MysqlGenerator {
         ).setPackageInfo(
                 // 包配置
                 new PackageConfig()
-                        .setModuleName("")
-                        .setParent("com.qkh")// 自定义包路径
-                        .setController("controller")// 这里是控制器包名，默认 web
+                        .setModuleName("interview")
+                        .setParent("com.seekon.hr")// 自定义包路径
+                        .setController("web.controller")// 这里是控制器包名，默认 web
+                        .setService("client.service")
+                        .setServiceImpl("service.impl")
+                        .setMapper("dao")
+                        .setEntity("domain")
+                        .setVo("client.service.vo")
+                        .setQryVo("client.service.vo")
+                        .setEntityQry("domain.qry")
+                        .setMapperTest("test.mapper")
+                        .setServiceTest("test.service")
+                        .setControllerTest("test.controller")
         ).setCfg(
                 // 注入自定义配置，可以在 VM 中使用 cfg.abc 设置的值
                 new InjectionConfig() {
@@ -142,8 +155,9 @@ public class MysqlGenerator {
                         map.put("abc", this.getConfig().getGlobalConfig().getAuthor() + "-mp");
                         map.put("usingSwagger", true);
                         //1：继承mybatis plus指定的默认接口，2：继承自定义的BaseMapper接口, 其他:不继承任何接口
-                        map.put("baseMapper", 2);
-                        map.put("baseService", 2);
+                        map.put("baseMapper", 3);
+                        map.put("baseService", 3);
+                        map.put("containPage", true);
                         this.setMap(map);
                     }
                 }.setFileOutConfigList(Collections.<FileOutConfig>singletonList(new FileOutConfig("/templates/mapper.xml.vm") {
@@ -155,7 +169,8 @@ public class MysqlGenerator {
                 }))
         ).setTemplate(
                 // 关闭默认 xml 生成，调整生成 至 根目录
-                new TemplateConfig().setXml(null)
+                new TemplateConfig()
+//                        .setXml("src/main/resources/template")
                 // 自定义模板配置，模板可以参考源码 /mybatis-plus/src/main/resources/template 使用 copy
                 // 至您项目 src/main/resources/template 目录下，模板名称也可自定义如下配置：
                 // .setController("...");
@@ -164,6 +179,7 @@ public class MysqlGenerator {
                 // .setXml("...");
                 // .setService("...");
                 // .setServiceImpl("...");
+//                .setVo("")
         );
 
         // 执行生成

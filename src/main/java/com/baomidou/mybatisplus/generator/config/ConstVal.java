@@ -50,6 +50,12 @@ public class ConstVal {
     public static final String XML_SUFFIX = ".xml";
 
     public static final String TEMPLATE_ENTITY = "/templates/entity.java.vm";
+    public static final String TEMPLATE_VO = "/templates/vo.java.vm";
+    public static final String TEMPLATE_ENTITY_QRY = "/templates/entityQry.java.vm";
+    public static final String TEMPLATE_MAPPER_TEST = "/templates/mapperTest.java.vm";
+    public static final String TEMPLATE_SERVICE_TEST = "/templates/serviceTest.java.vm";
+    public static final String TEMPLATE_CONTROLLER_TEST = "/templates/controllerTest.java.vm";
+    public static final String TEMPLATE_QRYVO = "/templates/qryVo.java.vm";
     public static final String TEMPLATE_MAPPER = "/templates/mapper.java.vm";
     public static final String TEMPLATE_BASE_MAPPER = "/templates/baseMapper.java.vm";
     public static final String TEMPLATE_XML = "/templates/mapper.xml.vm";
@@ -69,4 +75,17 @@ public class ConstVal {
     public static final String SUPERD_SERVICE_CLASS = "com.baomidou.mybatisplus.service.IService";
     public static final String SUPERD_SERVICEIMPL_CLASS = "com.baomidou.mybatisplus.service.impl.ServiceImpl";
 
+    public static final String VO = "Vo";
+    public static final String QRYVO = "QryVo";
+    public static final String ENTITY_QRY = "Qry";
+    public static final String MAPPER_TEST = "MapperTest";
+    public static final String SERVICE_TEST = "ServiceTest";
+    public static final String CONTROLLER_TEST = "ControllerTest";
+
+    public static final String VO_PATH = "vo_path";
+    public static final String QRYVO_PATH = "qryVo_path";
+    public static final String ENTITY_QRY_PATH = "entity_qry_path";
+    public static final String MAPPER_TEST_PATH = "mapper_test_path";
+    public static final String SERVICE_TEST_PATH = "service_test_path";
+    public static final String CONTROLLER_TEST_PATH = "controller_test_path";
 }

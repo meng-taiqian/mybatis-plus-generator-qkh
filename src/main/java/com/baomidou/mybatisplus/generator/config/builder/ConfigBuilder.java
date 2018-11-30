@@ -232,6 +232,12 @@ public class ConfigBuilder {
         packageInfo.put(ConstVal.SERIVCE, joinPackage(config.getParent(), config.getService()));
         packageInfo.put(ConstVal.SERVICEIMPL, joinPackage(config.getParent(), config.getServiceImpl()));
         packageInfo.put(ConstVal.CONTROLLER, joinPackage(config.getParent(), config.getController()));
+        packageInfo.put(ConstVal.VO, joinPackage(config.getParent(), config.getVo()));
+        packageInfo.put(ConstVal.QRYVO, joinPackage(config.getParent(), config.getQryVo()));
+        packageInfo.put(ConstVal.ENTITY_QRY, joinPackage(config.getParent(), config.getEntityQry()));
+        packageInfo.put(ConstVal.MAPPER_TEST, joinPackage(config.getParent(), config.getMapperTest()));
+        packageInfo.put(ConstVal.SERVICE_TEST, joinPackage(config.getParent(), config.getServiceTest()));
+        packageInfo.put(ConstVal.CONTROLLER_TEST, joinPackage(config.getParent(), config.getControllerTest()));
 
         // 生成路径信息
         pathInfo = new HashMap<>();
@@ -246,6 +252,24 @@ public class ConfigBuilder {
         }
         if (StringUtils.isNotEmpty(template.getService())) {
             pathInfo.put(ConstVal.SERIVCE_PATH, joinPath(outputDir, packageInfo.get(ConstVal.SERIVCE)));
+        }
+        if (StringUtils.isNotEmpty(template.getVo())) {
+            pathInfo.put(ConstVal.VO_PATH, joinPath(outputDir, packageInfo.get(ConstVal.VO)));
+        }
+        if (StringUtils.isNotEmpty(template.getQryVo())) {
+            pathInfo.put(ConstVal.QRYVO_PATH, joinPath(outputDir, packageInfo.get(ConstVal.QRYVO)));
+        }
+        if (StringUtils.isNotEmpty(template.getEntityQry())) {
+            pathInfo.put(ConstVal.ENTITY_QRY_PATH, joinPath(outputDir, packageInfo.get(ConstVal.ENTITY_QRY)));
+        }
+        if (StringUtils.isNotEmpty(template.getMapperTest())) {
+            pathInfo.put(ConstVal.MAPPER_TEST_PATH, joinPath(outputDir, packageInfo.get(ConstVal.MAPPER_TEST)));
+        }
+        if (StringUtils.isNotEmpty(template.getServiceTest())) {
+            pathInfo.put(ConstVal.SERVICE_TEST_PATH, joinPath(outputDir, packageInfo.get(ConstVal.SERVICE_TEST)));
+        }
+        if (StringUtils.isNotEmpty(template.getControllerTest())) {
+            pathInfo.put(ConstVal.CONTROLLER_TEST_PATH, joinPath(outputDir, packageInfo.get(ConstVal.CONTROLLER_TEST)));
         }
         if (StringUtils.isNotEmpty(template.getServiceImpl())) {
             pathInfo.put(ConstVal.SERVICEIMPL_PATH, joinPath(outputDir, packageInfo.get(ConstVal.SERVICEIMPL)));
@@ -338,6 +362,36 @@ public class ConfigBuilder {
                 tableInfo.setServiceImplName(String.format(globalConfig.getServiceImplName(), tableInfo.getEntityName()));
             } else {
                 tableInfo.setServiceImplName(tableInfo.getEntityName() + ConstVal.SERVICEIMPL);
+            }
+            if (StringUtils.isNotEmpty(globalConfig.getVoName())) {
+                tableInfo.setVoName(String.format(globalConfig.getVoName(), tableInfo.getEntityName()));
+            } else {
+                tableInfo.setVoName(tableInfo.getEntityName() + ConstVal.VO);
+            }
+            if (StringUtils.isNotEmpty(globalConfig.getQryVoName())) {
+                tableInfo.setQryVoName(String.format(globalConfig.getQryVoName(), tableInfo.getEntityName()));
+            } else {
+                tableInfo.setQryVoName(tableInfo.getEntityName() + ConstVal.QRYVO);
+            }
+            if (StringUtils.isNotEmpty(globalConfig.getEntityQryName())) {
+                tableInfo.setEntityQryName(String.format(globalConfig.getEntityQryName(), tableInfo.getEntityName()));
+            } else {
+                tableInfo.setEntityQryName(tableInfo.getEntityName() + ConstVal.ENTITY_QRY);
+            }
+            if (StringUtils.isNotEmpty(globalConfig.getMapperTestName())) {
+                tableInfo.setMapperTestName(String.format(globalConfig.getMapperTestName(), tableInfo.getEntityName()));
+            } else {
+                tableInfo.setMapperTestName(tableInfo.getEntityName() + ConstVal.MAPPER_TEST);
+            }
+            if (StringUtils.isNotEmpty(globalConfig.getServiceTestName())) {
+                tableInfo.setServiceTestName(String.format(globalConfig.getServiceTestName(), tableInfo.getEntityName()));
+            } else {
+                tableInfo.setServiceTestName(tableInfo.getEntityName() + ConstVal.SERVICE_TEST);
+            }
+            if (StringUtils.isNotEmpty(globalConfig.getControllerTestName())) {
+                tableInfo.setControllerTestName(String.format(globalConfig.getControllerTestName(), tableInfo.getEntityName()));
+            } else {
+                tableInfo.setControllerTestName(tableInfo.getEntityName() + ConstVal.CONTROLLER_TEST);
             }
             if (StringUtils.isNotEmpty(globalConfig.getControllerName())) {
                 tableInfo.setControllerName(String.format(globalConfig.getControllerName(), tableInfo.getEntityName()));

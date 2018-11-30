@@ -1,20 +1,23 @@
 package ${package.Mapper};
 
 import ${package.Entity}.${entity};
+import ${package.Qry}.${table.entityQryName};
 #if($cfg.baseMapper == 1)
 import ${superMapperClassPackage};
 #end
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Mapper;
+import java.util.List;
 
 /**
  * <p>
   * $!{table.comment} Mapper 接口
  * </p>
  *
- * @author ${author}
  * @since ${date}
  */
 
-
+@Mapper
 #if($cfg.baseMapper == 1)
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}>{
 #elseif($cfg.baseMapper == 2)
@@ -22,19 +25,17 @@ public interface ${table.mapperName} extends  BaseMapper<${entity}, ${table.keyF
 #else
 public interface ${table.mapperName}{
 
-        ${entity} selectByPrimaryKey(${table.keyField.propertyType} ${table.keyField.propertyName});
+        ${entity} selectByPrimaryKey(String pid);
 
-        List<${entity}> selectList();
+        List<${entity}> selectList(${table.qryName} qry);
 
-        int insert(${entity} ${instance});
+        ${entity} checkExists(@Param("unitId") String unitId, @Param("name") String name);
 
         int insertSelective(${entity} ${instance});
 
-        int updateByPrimaryKey(${entity} ${instance});
-
         int updateByPrimaryKeySelective(${entity} ${instance});
 
-        int delete(${table.keyField.propertyType} ${table.keyField.propertyName});
+        int delete(String pid);
 
 #end
 }

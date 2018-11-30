@@ -1,0 +1,93 @@
+package ${package.ServiceImpl};
+
+import com.github.pagehelper.PageInfo;
+import ${package.Entity}.${entity};
+import ${package.Qry}.${table.entityQryName};
+import ${package.Mapper}.${table.mapperName};
+import ${package.ServiceImpl}.${table.serviceImplName};
+import ${package.Service}.${table.voName};
+import com.seekon.hr.organization.service.unit.impl.RechargeRecordServiceImpl;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.BeanUtils;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static com.seekon.hr.EntityUtils.mockBean;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.when;
+
+/**
+ * <p>
+  * $!{table.comment} Service 测试
+ * </p>
+ *
+ * @since ${date}
+ */
+
+#set($capitalServiceName="${instance}Service")
+#set($capitalMapperName="${instance}Mapper")
+@RunWith(SpringJUnit4ClassRunner.class)
+public class ${table.serviceTestName} {
+
+    @Mock
+    private ${table.mapperName} ${capitalMapperName};
+
+    @InjectMocks
+    private ${table.serviceImplName} ${capitalServiceName};
+
+    private final String PID = "1";
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testInsertSelective() {
+        ${entity} ${instance} = mockBean(${entity}.class);
+        when(${capitalMapperName}.insertSelective(any(${entity}.class))).thenReturn(1);
+        ${table.voName} vo = new ${table.voName}();
+        BeanUtils.copyProperties(${instance}, vo);
+        vo.setPid(null);
+        ${capitalServiceName}.insertSelective(vo);
+        Assert.assertNotNull(vo.getPid());
+    }
+
+    @Test
+    public void testSelectByPrimaryKey(){
+        when(${capitalMapperName}.selectByPrimaryKey(PID)).thenReturn(mockBean(${entity}.class));
+        ${table.voName} vo = ${capitalServiceName}.selectByPrimaryKey(PID);
+        Assert.assertNotNull(vo);
+    }
+
+    @Test
+    public void testSelectList(){
+        ${entity} entityOne = mockBean(${entity}.class);
+        ${entity} entityTwo = mockBean(${entity}.class);
+        List<${entity}> entities = Arrays.asList(entityOne, entityTwo);
+        when(${capitalMapperName}.selectList(any(${table.entityQryName}.class))).thenReturn(entities);
+        PageInfo<${table.voName}> pagerResult = ${capitalServiceName}.selectList(mockBean(${table.qryVoName}.class));
+        Assert.assertNotNull(pagerResult.getList());
+        Assert.assertEquals(2, pagerResult.getList().size());
+    }
+
+    @Test
+    public void testUpdateByPrimaryKeySelective(){
+        when(${capitalMapperName}.updateByPrimaryKeySelective(any(${entity}.class))).thenReturn(1);
+        Assert.assertEquals(1, ${capitalServiceName}.updateByPrimaryKeySelective(mockBean(${table.voName}.class)));
+    }
+
+    @Test
+    public void testDelete(){
+        when(${capitalMapperName}.delete(anyString())).thenReturn(1);
+        Assert.assertEquals(1, ${capitalServiceName}.delete(anyString()));
+    }
+}

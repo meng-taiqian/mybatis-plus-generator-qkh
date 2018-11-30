@@ -1,22 +1,30 @@
 package ${package.ServiceImpl};
 
 import ${package.Entity}.${entity};
+import ${package.EntityQry}.${table.qryName};
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
+import ${package.Service}.${table.voName};
 #if($cfg.baseService == 1)
 import ${superServiceImplClassPackage};
 #end
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.seekon.hr.common.utils.TransUtil;
+
+import static com.seekon.hr.common.utils.TransUtil.*;
 
 /**
  * <p>
  * $!{table.comment} 服务实现类
  * </p>
  *
- * @author ${author}
  * @since ${date}
  */
-@Service
+@Service("${instance}Service")
 #if($cfg.baseService == 1)
 public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
 #elseif($cfg.baseService == 2)
@@ -24,4 +32,33 @@ public class ${table.serviceImplName} extends ServiceImpl<${table.mapperName}, $
 #else
 public class ${table.serviceImplName} implements ${table.serviceName} {
 #end
+        @Autowired
+        private ${table.mapperName} ${instance}Mapper;
+
+        @Override
+        public ${table.voName} selectByPrimaryKey(String pid){
+            return transfer(${table.voName}.class, ${instance}Mapper.selectByPrimaryKey(pid));
+        }
+
+        @Override
+        public PageInfo<${table.voName}> selectList(${table.qryVoName} qryVo){
+            PageHelper.startPage(qryVo.getPageNum(), qryVo.getPageSize());
+            return transferPageList(${table.voName}.class, new PageInfo<>(${instance}Mapper.selectList(transfer(${table.entityQryName}.class, qryVo))));
+        }
+
+        @Override
+        public int insertSelective(${table.voName} ${instance}Vo){
+            Assert.isNull(${instance}Mapper.checkExists(${instance}Vo.getUnitId(), ${instance}Vo.getName()), "$!{table.comment}已存在！");
+            return ${instance}Mapper.insertSelective(TransUtil.transfer(${entity}.class, ${instance}Vo));
+        }
+
+        @Override
+        public int updateByPrimaryKeySelective(${table.voName} ${instance}Vo){
+            return ${instance}Mapper.updateByPrimaryKeySelective(TransUtil.transfer(${entity}.class, ${instance}Vo));
+        }
+
+        @Override
+        public int delete(String pid){
+            return ${instance}Mapper.delete(pid);
+        }
 }

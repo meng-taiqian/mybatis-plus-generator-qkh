@@ -52,6 +52,12 @@ public class TableInfo {
     private TableField keyField;
     private List<String> importPackages = new ArrayList<>();
     private String fieldNames;
+    private String voName;
+    private String qryVoName;
+    private String entityQryName;
+    private String mapperTestName;
+    private String serviceTestName;
+    private String controllerTestName;
 
     public boolean isConvert() {
         return convert;
@@ -182,15 +188,15 @@ public class TableInfo {
                 if (field.isKeyFlag()) {
                     // 主键
                     if (field.isConvert() || field.isKeyIdentityFlag()) {
-                        pkgSet.add("com.baomidou.mybatisplus.annotations.TableId");
+//                        pkgSet.add("com.baomidou.mybatisplus.annotations.TableId");
                     }
                     // 自增
                     if (field.isKeyIdentityFlag()) {
-                        pkgSet.add("com.baomidou.mybatisplus.enums.IdType");
+//                        pkgSet.add("com.baomidou.mybatisplus.enums.IdType");
                     }
                 } else if (field.isConvert()) {
                     // 普通字段
-                    pkgSet.add("com.baomidou.mybatisplus.annotations.TableField");
+//                    pkgSet.add("com.baomidou.mybatisplus.annotations.TableField");
                 }
                 if (null != field.getFill()) {
                     // 填充字段
@@ -261,9 +267,58 @@ public class TableInfo {
      */
     private String cov2col(TableField field) {
         if (null != field) {
-            return field.isConvert() ? field.getName() + " AS " + field.getPropertyName() : field.getName();
+            return field.getName();
+//            return field.isConvert() ? field.getName() + " AS \"" + field.getPropertyName() + "\"" : field.getName();
+//            return field.getName() + " AS \"" + field.getPropertyName() + "\"";
         }
         return StringUtils.EMPTY;
     }
 
+    public String getVoName() {
+        return voName;
+    }
+
+    public void setVoName(String voName) {
+        this.voName = voName;
+    }
+
+    public void setQryVoName(String qryVoName) {
+        this.qryVoName = qryVoName;
+    }
+
+    public String getQryVoName() {
+        return qryVoName;
+    }
+
+    public void setEntityQryName(String entityQryName) {
+        this.entityQryName = entityQryName;
+    }
+
+    public String getEntityQryName() {
+        return entityQryName;
+    }
+
+    public void setMapperTestName(String mapperTestName) {
+        this.mapperTestName = mapperTestName;
+    }
+
+    public String getMapperTestName() {
+        return mapperTestName;
+    }
+
+    public void setServiceTestName(String serviceTestName) {
+        this.serviceTestName = serviceTestName;
+    }
+
+    public String getServiceTestName() {
+        return serviceTestName;
+    }
+
+    public void setControllerTestName(String controllerTestName) {
+        this.controllerTestName = controllerTestName;
+    }
+
+    public String getControllerTestName() {
+        return controllerTestName;
+    }
 }

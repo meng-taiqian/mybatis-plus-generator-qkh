@@ -1,0 +1,70 @@
+package ${package.Mapper};
+
+import ${package.Mapper}.BaseTest;
+import ${package.Mapper}.${table.mapperName};
+import ${package.Entity}.${entity};
+import ${package.Qry}.${table.entityQryName};
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+
+/**
+ * <p>
+  * $!{table.comment} Mapper 接口测试
+ * </p>
+ *
+ * @since ${date}
+ */
+
+
+public class ${table.mapperTestName} extends BaseTest {
+
+    @Autowired
+    private ${table.mapperName} mapper;
+
+    private ${entity} ${instance};
+
+    private final String PID = "1";
+
+    @Before
+    public void before() {
+        ${instance} = new ${entity}();
+#foreach($field in ${table.fields})
+        ${instance}.set${field.capitalName}("${field.propertyName}");
+#end
+        ${instance}.setPid(PID);
+        ${instance}.setId(null);
+    }
+
+    @Test
+    public void testInsertSelective() {
+        Assert.assertEquals(1, mapper.insertSelective(${instance}));
+    }
+
+    @Test
+    public void testSelectByPrimaryKey() {
+        Assert.assertEquals(1, mapper.insertSelective(${instance}));
+        Assert.assertNull(mapper.selectByPrimaryKey("-1"));
+        ${entity} ${instance}New = mapper.selectByPrimaryKey(PID);
+        Assert.assertNotNull(${instance}New);
+    }
+
+    @Test
+    public void testSelectList() {
+        Assert.assertEquals(1, mapper.insertSelective(${instance}));
+        ${entity} ${instance}_ = new ${entity}();
+        BeanUtils.copyProperties(${instance}, ${instance}_);
+        ${instance}_.setPid("2");
+        Assert.assertEquals(1, mapper.insertSelective(${instance}_));
+        ${table.entityQryName} qry = new ${table.entityQryName}();
+        BeanUtils.copyProperties(${instance}, qry);
+        qry.setPid(null);
+        List<${entity}> list = mapper.selectList(qry);
+        Assert.assertTrue(!CollectionUtils.isEmpty(list));
+        Assert.assertEquals(2, list.size());
+    }
+}

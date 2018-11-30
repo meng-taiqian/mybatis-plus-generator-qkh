@@ -8,11 +8,7 @@ public interface BaseMapper<T, PK> {
 
     List<T> selectList();
 
-    int insert(T t);
-
     int insertSelective(T t);
-
-    int updateByPrimaryKey(T t);
 
     int updateByPrimaryKeySelective(T t);
 

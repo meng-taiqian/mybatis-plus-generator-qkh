@@ -15,6 +15,8 @@
  */
 package com.baomidou.mybatisplus.generator.config;
 
+import javax.security.auth.login.Configuration;
+
 /**
  * <p>
  * 模板路径配置项
@@ -42,6 +44,13 @@ public class TemplateConfig {
     private String iService = ConstVal.TEMPLATE_ISERVICE;
 
     private String iServiceImpl = ConstVal.TEMPLATE_ISERVICEIMPL;
+    private String vo = ConstVal.TEMPLATE_VO;
+    private String qryVo = ConstVal.TEMPLATE_QRYVO;
+    private String entityQry = ConstVal.TEMPLATE_ENTITY_QRY;
+    private String mapperTest = ConstVal.TEMPLATE_MAPPER_TEST;
+    private String serviceTest = ConstVal.TEMPLATE_SERVICE_TEST;
+    private String controllerTest = ConstVal.TEMPLATE_CONTROLLER_TEST;
+
 
     public String getEntity() {
         return entity;
@@ -121,6 +130,60 @@ public class TemplateConfig {
 
     public TemplateConfig setiServiceImpl(String iServiceImpl) {
         this.iServiceImpl = iServiceImpl;
+        return this;
+    }
+
+    public String getVo() {
+        return vo;
+    }
+
+    public TemplateConfig setVo(String vo) {
+        this.vo = vo;
+        return this;
+    }
+
+    public String getQryVo() {
+        return qryVo;
+    }
+
+    public TemplateConfig setQryVo(String qryVo) {
+        this.qryVo = qryVo;
+        return this;
+    }
+
+    public String getEntityQry() {
+        return entityQry;
+    }
+
+    public TemplateConfig setEntityQry(String entityQry) {
+        this.entityQry = entityQry;
+        return this;
+    }
+
+    public String getMapperTest() {
+        return mapperTest;
+    }
+
+    public TemplateConfig setMapperTest(String mapperTest) {
+        this.mapperTest = mapperTest;
+        return this;
+    }
+
+    public String getServiceTest() {
+        return serviceTest;
+    }
+
+    public TemplateConfig setServiceTest(String serviceTest) {
+        this.serviceTest = serviceTest;
+        return this;
+    }
+
+    public String getControllerTest() {
+        return controllerTest;
+    }
+
+    public TemplateConfig setControllerTest(String controllerTest) {
+        this.controllerTest = controllerTest;
         return this;
     }
 }

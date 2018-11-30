@@ -1,0 +1,162 @@
+package ${package.Controller};
+
+import ${package.Vo}.${table.voName};
+import ${package.QryVo}.${table.qryVoName};
+import ${package.Controller}.${table.controllerName};
+import ${package.Service}.${table.voName};
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockSessionCookieConfig;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.NestedServletException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.seekon.hr.web.response.HttpResponses.DEAL_SUCCESS;
+import static com.seekon.hr.web.response.BaseResponse.response;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+
+/**
+ * <p>
+  * $!{table.comment} Controller 测试
+ * </p>
+ *
+ * @since ${date}
+ */
+
+#set($capitalServiceName="${instance}Service")
+#set($capitalControllerName="${instance}Controller")
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = MockSessionCookieConfig.class)
+@WebAppConfiguration
+public class ${table.controllerTestName} {
+
+    private MockMvc mvc;
+
+    @Mock
+    private ${table.serviceName} ${capitalServiceName};
+
+    @InjectMocks
+    private ${table.controllerName} ${capitalControllerName};
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+        mvc = MockMvcBuilders.standaloneSetup(${capitalControllerName}).build();
+    }
+
+    @Test
+    public void testGet() throws Exception {
+        ${table.voName} vo = initVo();
+        when(${capitalServiceName}.selectByPrimaryKey("1")).thenReturn(vo);
+        mvc.perform(get("/${instance}").contentType(MULTIPART_FORM_DATA)
+                .param("pid", "1").accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(JSONObject.toJSONString(response(DEAL_SUCCESS).data(vo))));
+        mvc.perform(get("/${instance}").contentType(MULTIPART_FORM_DATA)
+                .param("pid", "-1").accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(JSONObject.toJSONString(response(DEAL_SUCCESS))));
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        when(${capitalServiceName}.delete("1")).thenReturn(1);
+        mvc.perform(post("/${instance}/delete").contentType(MULTIPART_FORM_DATA)
+                .param("pid", "1").accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(JSONObject.toJSONString(response(DEAL_SUCCESS))));
+        mvc.perform(post("/${instance}/delete").contentType(MULTIPART_FORM_DATA)
+                .param("pid", "-1").accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(JSONObject.toJSONString(response(DEAL_SUCCESS))));
+    }
+
+    @Test
+    public void testSelectList() throws Exception {
+        PageInfo<${table.voName}> pagerResult = mockPagerResult();
+        when(${capitalServiceName}.selectList(any(${table.voName}.class))).thenReturn(pagerResult);
+        mvc.perform(get("/${instance}/list").contentType(MULTIPART_FORM_DATA)
+                .param("pageNum", "1")
+                .param("pageSize", "20")
+                .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(JSONObject.toJSONString(response(DEAL_SUCCESS).data(pagerResult))));
+    }
+
+    @Test
+    public void testInsert() throws Exception {
+        when(${capitalServiceName}.insertSelective(any(${table.voName}.class))).thenReturn(1);
+        mvc.perform(post("/${instance}").contentType(MULTIPART_FORM_DATA)
+                .param("pid", "1").accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(JSONObject.toJSONString(response(DEAL_SUCCESS))));
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+        when(${capitalServiceName}.updateByPrimaryKeySelective(any(${table.voName}.class))).thenReturn(1);
+        mvc.perform(post("/${instance}/update").contentType(MULTIPART_FORM_DATA)
+                .param("pid", "1").accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(JSONObject.toJSONString(response(DEAL_SUCCESS))));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void testUpdate_param_error() throws Exception {
+        when(${capitalServiceName}.updateByPrimaryKeySelective(any(${table.voName}.class))).thenReturn(1);
+        mvc.perform(post("/${instance}/update").contentType(MULTIPART_FORM_DATA)
+                .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(JSONObject.toJSONString(response(DEAL_SUCCESS))))
+                .andDo(print());
+    }
+
+    private ${table.voName} initVo() {
+        ${table.voName} vo = new ${table.voName}();
+#foreach($field in ${table.fields})
+    #if(${field.propertyName} != "createTime" && ${field.propertyName} != "updateTime" && ${field.propertyName} != "id" && ${field.propertyName} != "platformId")
+        vo.set${field.capitalName}("${field.propertyName}");
+    #end
+#end
+        vo.setPid("1");
+        return vo;
+    }
+
+    private PageInfo<${table.voName}> mockPagerResult() {
+        PageInfo<${table.voName}> pagerResult = new PageInfo();
+        pagerResult.setPageSize(20);
+        pagerResult.setPageNum(1);
+
+        List<${table.voName}> list = new ArrayList<>(2);
+        pagerResult.setList(list);
+        ${table.voName} vo;
+        for(int i = 0; i < 2; i++) {
+            vo = new ${table.voName}();
+    #foreach($field in ${table.fields})
+        #if(${field.propertyName} != "createTime" && ${field.propertyName} != "updateTime" && ${field.propertyName} != "id" && ${field.propertyName} != "platformId")
+            vo.set${field.capitalName}("${field.propertyName}");
+        #end
+    #end
+            vo.setPid(i + "");
+            list.add(vo);
+        }
+        return pagerResult;
+    }
+}

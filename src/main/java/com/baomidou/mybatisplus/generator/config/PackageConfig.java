@@ -17,6 +17,8 @@ package com.baomidou.mybatisplus.generator.config;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 
+import java.util.Arrays;
+
 /**
  * <p>
  * 跟包相关的配置项
@@ -64,6 +66,20 @@ public class PackageConfig {
      * Controller包名
      */
     private String controller = "web";
+
+    /**
+     * Vo包名
+     */
+    private String vo = "service.vo";
+
+    /**
+     * qryVo包名
+     */
+    private String qryVo = "service.vo";
+    private String entityQry = "entity.qry";
+    private String mapperTest = "test.mapper";
+    private String serviceTest = "test.service";
+    private String controllerTest = "test.controller";
 
     public String getParent() {
         if (StringUtils.isNotEmpty(moduleName)) {
@@ -143,4 +159,61 @@ public class PackageConfig {
         return this;
     }
 
+    public String getVo() {
+        return vo;
+    }
+
+    public PackageConfig setVo(String vo) {
+        this.vo = vo;
+        return this;
+    }
+
+    public String getQryVo() {
+        return qryVo;
+    }
+
+    public PackageConfig setQryVo(String qryVo) {
+        this.qryVo = qryVo;
+        return this;
+    }
+
+    public PackageConfig setEntityQry(String entityQry) {
+        this.entityQry = entityQry;
+        return this;
+    }
+
+    public String getEntityQry() {
+        return entityQry;
+    }
+
+    public PackageConfig setMapperTest(String mapperTest) {
+        this.mapperTest = mapperTest;
+        return this;
+    }
+
+    public String getMapperTest() {
+        return mapperTest;
+    }
+
+    public PackageConfig setServiceTest(String serviceTest) {
+        this.serviceTest = serviceTest;
+        return this;
+    }
+
+    public String getServiceTest() {
+        return serviceTest;
+    }
+
+    public PackageConfig setControllerTest(String controllerTest) {
+        this.controllerTest = controllerTest;
+        return this;
+    }
+
+    public String getControllerTest() {
+        return controllerTest;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.asList("员工姓名", "姓名", "员工").contains("员工姓名"));
+    }
 }

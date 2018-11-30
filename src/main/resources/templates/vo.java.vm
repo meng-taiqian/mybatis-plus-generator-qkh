@@ -1,4 +1,4 @@
-package ${package.Entity};
+package ${package.Vo};
 
 #if(${activeRecord})
 import java.io.Serializable;
@@ -12,6 +12,10 @@ import ${pkg};
 import lombok.Data;
 import lombok.experimental.Accessors;
 #end
+#if(${cfg.usingSwagger})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
 /**
  * <p>
  * $!{table.comment}
@@ -23,18 +27,23 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 #end
+#if(${cfg.usingSwagger})
+@ApiModel("$!{table.comment}")
+#end
 #if(${superEntityClass})
 public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
 #elseif(${activeRecord})
 public class ${entity} extends Model<${entity}> {
 #else
-public class ${entity} implements Serializable {
+public class ${entity}Vo implements Serializable {
 #end
 
     private static final long serialVersionUID = 1L;
 
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
+#if(${field.propertyName} != "createTime" && ${field.propertyName} != "updateTime" && ${field.propertyName} != "id" && ${field.propertyName} != "platformId")
+
 #if(${field.keyFlag})
 #set($keyPropertyName=${field.propertyName})
 #end
@@ -42,6 +51,9 @@ public class ${entity} implements Serializable {
     /**
      * ${field.comment}
      */
+#end
+#if(${cfg.usingSwagger})
+	@ApiModelProperty(value = "$!field.comment"#if("$!field.nullAble" == "NO")#if(!${field.keyFlag}), required = true#end#end)
 #end
 ## 乐观锁注解
 #if(${versionFieldName}==${field.name})
@@ -54,9 +66,11 @@ public class ${entity} implements Serializable {
 	private ${field.propertyType} ${field.propertyName};
 
 #end
+#end
 ## ----------  END 字段循环遍历  ----------
 #if(!${entityLombokModel})
 #foreach($field in ${table.fields})
+#if(${field.propertyName} != "createTime" && ${field.propertyName} != "updateTime" && ${field.propertyName} != "id" && ${field.propertyName} != "platformId")
 #if(${field.propertyType.equals("boolean")})
 #set($getprefix="is")
 #else
@@ -78,6 +92,7 @@ public class ${entity} implements Serializable {
 	}
 #end
 #end
+#end
 
 #if(${entityColumnConstant})
 #foreach($field in ${table.fields})
@@ -85,15 +100,5 @@ public class ${entity} implements Serializable {
 
 #end
 #end
-#if(${activeRecord})
-	@Override
-	protected Serializable pkVal() {
-#if(${keyPropertyName})
-		return this.${keyPropertyName};
-#else
-		return this.id;
-#end
-	}
 
-#end
 }

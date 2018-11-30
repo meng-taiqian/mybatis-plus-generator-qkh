@@ -46,6 +46,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import org.springframework.validation.FieldError;
 
 /**
  * 生成文件
@@ -167,7 +168,7 @@ public class AutoGenerator {
             }
             if (tableInfo.isConvert()) {
                 // 表注解
-                tableInfo.setImportPackages("com.baomidou.mybatisplus.annotations.TableName");
+//                tableInfo.setImportPackages("com.baomidou.mybatisplus.annotations.TableName");
             }
             if (tableInfo.isLogicDelete(config.getStrategyConfig().getLogicDeleteFieldName())) {
                 // 逻辑删除注解
@@ -281,13 +282,30 @@ public class AutoGenerator {
             String serviceFile = String.format((pathInfo.get(ConstVal.SERIVCE_PATH) + File.separator + tableInfo.getServiceName() + ConstVal.JAVA_SUFFIX), entityName);
             String implFile = String.format((pathInfo.get(ConstVal.SERVICEIMPL_PATH) + File.separator + tableInfo.getServiceImplName() + ConstVal.JAVA_SUFFIX), entityName);
             String controllerFile = String.format((pathInfo.get(ConstVal.CONTROLLER_PATH) + File.separator + tableInfo.getControllerName() + ConstVal.JAVA_SUFFIX), entityName);
-
+            String voFile = String.format((pathInfo.get(ConstVal.VO_PATH) + File.separator + tableInfo.getVoName() + ConstVal.JAVA_SUFFIX), entityName);
+            String qryFile = String.format((pathInfo.get(ConstVal.QRYVO_PATH) + File.separator + tableInfo.getQryVoName() + ConstVal.JAVA_SUFFIX), entityName);
+            String entityQryFile = String.format((pathInfo.get(ConstVal.ENTITY_QRY_PATH) + File.separator + tableInfo.getEntityQryName() + ConstVal.JAVA_SUFFIX), entityName);
+            String mapperTestFile = String.format((pathInfo.get(ConstVal.MAPPER_TEST_PATH) + File.separator + tableInfo.getMapperTestName() + ConstVal.JAVA_SUFFIX), entityName);
+            String serviceTestFile = String.format((pathInfo.get(ConstVal.SERVICE_TEST_PATH) + File.separator + tableInfo.getServiceTestName() + ConstVal.JAVA_SUFFIX), entityName);
+            String controllerTestFile = String.format((pathInfo.get(ConstVal.CONTROLLER_TEST_PATH) + File.separator + tableInfo.getControllerTestName() + ConstVal.JAVA_SUFFIX), entityName);
             TemplateConfig template = config.getTemplate();
 
             // 根据override标识来判断是否需要创建文件
             if (isCreate(entityFile)) {
                 vmToFile(context, template.getEntity(), entityFile);
             }
+            if (isCreate(voFile))
+                vmToFile(context, template.getVo(), voFile);
+            if (isCreate(qryFile))
+                vmToFile(context, template.getQryVo(), qryFile);
+            if (isCreate(entityQryFile))
+                vmToFile(context, template.getEntityQry(), entityQryFile);
+            if (isCreate(mapperTestFile))
+                vmToFile(context, template.getMapperTest(), mapperTestFile);
+            if (isCreate(serviceTestFile))
+                vmToFile(context, template.getServiceTest(), serviceTestFile);
+            if (isCreate(controllerTestFile))
+                vmToFile(context, template.getControllerTest(), controllerTestFile);
             if (isCreate(mapperFile)) {
                 vmToFile(context, template.getMapper(), mapperFile);
             }

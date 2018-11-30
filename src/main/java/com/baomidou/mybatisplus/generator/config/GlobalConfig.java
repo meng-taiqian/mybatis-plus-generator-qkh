@@ -72,6 +72,39 @@ public class GlobalConfig {
     private String serviceName;
     private String serviceImplName;
     private String controllerName;
+    private String voName;
+    private String qryVoName;
+    private String entityQryName;
+    private String mapperTestName;
+    private String serviceTestName;
+    private String controllerTestName;
+
+    public String getMapperTestName() {
+        return mapperTestName;
+    }
+
+    public GlobalConfig setMapperTestName(String mapperTestName) {
+        this.mapperTestName = mapperTestName;
+        return this;
+    }
+
+    public String getServiceTestName() {
+        return serviceTestName;
+    }
+
+    public GlobalConfig setServiceTestName(String serviceTestName) {
+        this.serviceTestName = serviceTestName;
+        return this;
+    }
+
+    public String getControllerTestName() {
+        return controllerTestName;
+    }
+
+    public GlobalConfig setControllerTestName(String controllerTestName) {
+        this.controllerTestName = controllerTestName;
+        return this;
+    }
 
     public String getOutputDir() {
         return outputDir;
@@ -187,6 +220,33 @@ public class GlobalConfig {
 
     public GlobalConfig setControllerName(String controllerName) {
         this.controllerName = controllerName;
+        return this;
+    }
+
+    public String getVoName() {
+        return voName;
+    }
+
+    public GlobalConfig setVoName(String voName) {
+        this.voName = voName;
+        return this;
+    }
+
+    public String getQryVoName() {
+        return qryVoName;
+    }
+
+    public GlobalConfig setQryVoName(String qryVoName) {
+        this.qryVoName = qryVoName;
+        return this;
+    }
+
+    public String getEntityQryName() {
+        return entityQryName;
+    }
+
+    public GlobalConfig setEntityQryName(String entityQryName) {
+        this.entityQryName = entityQryName;
         return this;
     }
 }

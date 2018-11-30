@@ -1,15 +1,16 @@
 package ${package.Service};
 
-import ${package.Entity}.${entity};
+import ${package.QryVo}.${table.qryVoName};
+import ${package.Vo}.${table.voName};
 #if($cfg.baseService == 1)
 import ${superServiceClassPackage};
 #end
+import com.github.pagehelper.PageInfo;
 /**
  * <p>
  * $!{table.comment} 服务类
  * </p>
  *
- * @author ${author}
  * @since ${date}
  */
 #if($cfg.baseService == 1)
@@ -19,19 +20,15 @@ public interface ${table.serviceName} extends  BaseService<${entity}, ${table.ke
 #else
 public interface ${table.serviceName}{
 
-    ${entity} selectByPrimaryKey(${table.keyField.propertyType} ${table.keyField.propertyName});
+    ${table.voName} selectByPrimaryKey(String pid);
 
-    List<${entity}> selectList();
+    PageInfo<${table.voName}> selectList(${table.qryVoName} qryVo);
 
-    int insert(${entity} ${instance});
+    int insertSelective(${table.voName} ${instance}Vo);
 
-    int insertSelective(${entity} ${instance});
+    int updateByPrimaryKeySelective(${table.voName} ${instance}Vo);
 
-    int updateByPrimaryKey(${entity} ${instance});
-
-    int updateByPrimaryKeySelective(${entity} ${instance});
-
-    int delete(${table.keyField.propertyType} ${table.keyField.propertyName});
+    int delete(String pid);
 
 #end
 }

@@ -17,6 +17,9 @@ package com.baomidou.mybatisplus.generator.config.converts;
 
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
+import jdk.nashorn.internal.parser.JSONParser;
+
+import java.util.*;
 
 /**
  * <p>
@@ -60,4 +63,19 @@ public class MySqlTypeConvert implements ITypeConvert {
         return DbColumnType.STRING;
     }
 
+    public static void main(String[] args) {
+        Map<String, Object> parentMap = new HashMap<>();
+        Map<String, String> child = new HashMap<>();
+        Map<String, String>[] childs = new HashMap[2];
+        parentMap.put("key1", "key1");
+        parentMap.put("key2", "key2");
+        parentMap.put("childs", childs);
+        child.put("childKey1", "childKey1");
+        childs[0] = child;
+        child = new HashMap<>();
+        child.put("childKey2", "childKey2");
+        childs[1] = child;
+        System.out.println(parentMap);
+
+    }
 }

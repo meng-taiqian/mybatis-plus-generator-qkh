@@ -11,17 +11,6 @@
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="${package.Entity}.${entity}">
 #foreach($field in ${table.fields})
-#if(${field.keyFlag})##生成主键排在第一位
-	#set($keyPropertyType=${field.propertyType})
-	#set($keyPropertyName=${field.propertyName})
-	#set($keyFieldName=${field.name})
-		<id column="${field.name}" property="${field.propertyName}" />
-#end
-#end
-#foreach($field in ${table.commonFields})##生成公共字段
-	<result column="${field.name}" property="${field.propertyName}" />
-#end
-#foreach($field in ${table.fields})
 #if(!${field.keyFlag})##生成普通字段
 		<result column="${field.name}" property="${field.propertyName}" />
 #end
@@ -33,7 +22,7 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
 #foreach($field in ${table.commonFields})
-	#if(${field.name} == ${field.propertyName})${field.name}#else${field.name} AS ${field.propertyName}#end,
+	${field.name},
 #end
         ${table.fieldNames}
     </sql>
@@ -42,61 +31,77 @@
 		SELECT
 		<include refid="Base_Column_List"/>
 		FROM ${table.name}
+        <where>
+#foreach($field in $table.fields)
+    #if(${field.columnType} == "STRING")
+          <if test="${field.propertyName} != null and ${field.propertyName} != ''">
+              AND ${field.name} = #{${field.propertyName}}
+          </if>
+    #else
+          <if test="${field.propertyName} != null">
+              AND ${field.name} = #{${field.propertyName}}
+          </if>
+    #end
+#end
+        </where>
 	</select>
 
-	<select id="selectByPrimaryKey" parameterType="$keyPropertyType">
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List" />
         FROM ${table.name}
-		WHERE $keyFieldName = #{_parameter}
+		WHERE PID = #{pid}
 	</select>
 
-    <insert id="insert" parameterType="${entity}" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO ${table.name}(#set($i = 0)#foreach($field in ${table.fields})#set($i = $i + 1)${field.name}#if($i!=$table.fields.size()), #end#end)
-        VALUES (#set($i = 0)#foreach($field in ${table.fields})#set($i = $i + 1)#{${field.propertyName}}#if($i!=$table.fields.size()), #end#end)
-    </insert>
+    <select id="checkExists" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM ${table.name}
+        WHERE UNIT_ID = #{unitId} AND NAME = #{name}
+    </select>
 
-    <insert id="insertSelective" parameterType="${entity}" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="${package.Entity}.${entity}">
         INSERT INTO ${table.name}(
         <trim suffixOverrides=",">
 #foreach($field in $table.fields)
-			<if test="${field.propertyName} != null and ${field.propertyName} != ''">${field.name},</if>
+    #if(${field.columnType} == "STRING")
+          <if test="${field.propertyName} != null and ${field.propertyName} != ''">${field.name},</if>
+    #else
+          <if test="${field.propertyName} != null">${field.name},</if>
+    #end
+
 #end
         </trim>
         ) VALUES (
         <trim suffixOverrides=",">
 #foreach($field in $table.fields)
+    #if(${field.columnType} == "STRING")
 			<if test="${field.propertyName} != null and ${field.propertyName} != ''">#{${field.propertyName}},</if>
+    #else
+            <if test="${field.propertyName} != null">#{${field.propertyName}},</if>
+    #end
 #end
         </trim>
         )
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="${entity}">
+    <update id="updateByPrimaryKeySelective" parameterType="${package.Entity}.${entity}">
         UPDATE ${table.name} SET
         <trim suffixOverrides=",">
 #foreach($field in $table.fields)
 #if(!${field.keyFlag})
+    #if(${field.columnType} == "STRING")
 			<if test="${field.propertyName} != null and ${field.propertyName} != ''">${field.name} = #{${field.propertyName}},</if>
+    #else
+            <if test="${field.propertyName} != null">${field.name} = #{${field.propertyName}},</if>
+    #end
 #end
 #end
         </trim>
-        WHERE $keyFieldName = #{$keyPropertyName}
+        WHERE PID = #{pid}
 	</update>
 
-    <update id="updateByPrimaryKey" parameterType="${entity}">
-        UPDATE $table.name SET
-#set($i = 0)
-#foreach($field in $table.fields)
-#set($i = $i + 1)
-#if(!${field.keyFlag})
-		$field.name = #{$field.propertyName}#if($i != $table.fields.size()),#end
-#end
-#end
-        WHERE $keyFieldName = #{$keyPropertyName}
-    </update>
-
-    <delete id="deleteByPrimaryKey" parameterType="$keyPropertyType">
-        DELETE FROM $table.name WHERE $keyFieldName = #{_parameter}
+    <delete id="delete" parameterType="String">
+        DELETE FROM $table.name WHERE PID = #{pid}
     </delete>
 </mapper>

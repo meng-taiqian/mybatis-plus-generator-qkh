@@ -1,4 +1,4 @@
-package ${package.Entity};
+package ${package.Qry};
 
 #if(${activeRecord})
 import java.io.Serializable;
@@ -24,11 +24,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 #end
 #if(${superEntityClass})
-public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
+public class ${table.entityQryName} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
 #elseif(${activeRecord})
-public class ${entity} extends Model<${entity}> {
+public class ${table.entityQryName} extends Model<${entity}> {
 #else
-public class ${entity} implements Serializable {
+public class ${table.entityQryName} implements Serializable {
 #end
 
     private static final long serialVersionUID = 1L;
