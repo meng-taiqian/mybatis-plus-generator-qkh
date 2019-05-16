@@ -1,9 +1,8 @@
 package com.baomidou.mybatisplus.toolkit;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,9 +14,8 @@ import java.util.Objects;
 /**
  * @Date 2018/11/29 15:57
  */
+@Slf4j
 public class EntityUtils {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EntityUtils.class);
 
     public static <T> T mockBean(Class<T> clazz) {
         Field[] fields = clazz.getDeclaredFields();
@@ -32,11 +30,11 @@ public class EntityUtils {
                 if ((method = getMethod(field.getName(), clazz)) != null)
                     method.invoke(instance, randomValue(fieldType));
                 else
-                    LOGGER.error("can not find setter for property {} within class {}", field.getName(), clazz);
+                    log.error("can not find setter for property {} within class {}", field.getName(), clazz);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("mockBean of type {} failed!", clazz);
+            log.error("mockBean of type {} failed!", clazz);
         }
         return instance;
     }

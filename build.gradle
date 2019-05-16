@@ -1,10 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'maven'
-apply plugin: 'signing'
 
 ext {
     configuration = [
-            javaVersion = JavaVersion.VERSION_1_7
+            javaVersion = JavaVersion.VERSION_1_8
     ]
 
     libraries = [
@@ -16,6 +15,7 @@ ext {
 
 group = 'com.baomidou'
 version = '2.1.2'
+sourceCompatibility = 1.8
 
 description = "Mybatis 增强工具包 - 只做增强不做改变，简化CRUD操作"
 
@@ -94,16 +94,26 @@ artifacts {
     archives javadocJar
 }
 
-signing {
-    sign configurations.archives
+task writeNewPom {
+    pom {
+        project {
+            inceptionYear '2018'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("pom.xml")
 }
+
 
 // gradle clean build uploadArchives -Dun=用户名 -Dps=密码 -x test
 uploadArchives {
     repositories {
         mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
             def userName = System.getProperty("un")
             def passWord = System.getProperty("ps")
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
